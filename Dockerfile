@@ -1,6 +1,6 @@
 
 # Use a Python base image
-FROM python:3.12
+FROM python:3.11
 
 # Set the working directory
 WORKDIR /app
@@ -19,6 +19,9 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     libopenblas-dev
 
+    
+RUN pip install --no-cache-dir setuptools
+RUN pip install --upgrade setuptools
 RUN pip install -r requirements.txt
 
 # Expose the port
