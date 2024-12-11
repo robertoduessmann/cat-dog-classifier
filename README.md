@@ -95,20 +95,6 @@ curl -X POST "http://127.0.0.1:8000/predict/" -H "accept: application/json" -H "
 
 ---
 
-## Future Enhancements
-- Train the model on a custom dataset of cats and dogs.
-- Use a pre-trained model (e.g., ResNet) for better accuracy.
-- Add a web-based UI for predictions.
-
----
-
-## Acknowledgments
-- **PyTorch** for the deep learning framework.
-- **FastAPI** for the API framework.
-- **CIFAR-10 Dataset** for training and validation.
-
----
-
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
 
