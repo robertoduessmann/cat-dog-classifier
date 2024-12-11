@@ -63,7 +63,7 @@ Train the CNN model:
 ```bash
 python scripts/train_model.py
 ```
-The trained model will be saved in the `model/` directory as `cnn_model.pth`.
+The trained model will be saved in the `model/` directory as `cat_dog_model.pth`.
 
 ### 3. Start the API
 Run the FastAPI app:
