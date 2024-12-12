@@ -1,5 +1,6 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
 from torchvision import transforms
 from PIL import Image
 import torch
@@ -48,10 +49,12 @@ transform = transforms.Compose([
 @app.post("/predict/")
 async def predict(file: UploadFile = File(...)):
     try:
-        # Load image
-        image = Image.open(file.file).convert('RGB')
+        # Validate file type
+        if file.content_type not in ["image/jpeg", "image/png"]:
+            raise HTTPException(status_code=400, detail="Invalid file type. Only JPEG and PNG are supported.")
 
-        # Preprocess image
+        # Load and preprocess the image
+        image = Image.open(file.file).convert("RGB")
         input_tensor = transform(image).unsqueeze(0).to(device)
 
         # Make prediction
@@ -63,5 +66,10 @@ async def predict(file: UploadFile = File(...)):
 
         return {"prediction": prediction}
 
+    except HTTPException as http_exc:
+        # Return specific error for invalid file types
+        return JSONResponse(status_code=http_exc.status_code, content={"error": http_exc.detail})
+
     except Exception as e:
-        return {"error": str(e)}
+        # Handle generic errors
+        return {"error": f"An error occurred: {str(e)}"}

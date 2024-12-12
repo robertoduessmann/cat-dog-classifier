@@ -21,10 +21,10 @@ COPY model ./model
 COPY static ./static
 COPY requirements.txt ./ 
     
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose the port
 EXPOSE 8000
 
 # Command to run the app
-CMD ["python", "-m", "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-8000}"]

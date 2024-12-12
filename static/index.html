@@ -52,7 +52,7 @@
                 const formData = new FormData();
                 formData.append('file', file);
 
-                fetch('https://cat-dog-classifier-playground-61d4dcb9a9b4.herokuapp.com/predict', {
+                fetch('https://cat-dog-classifier-playground-61d4dcb9a9b4.herokuapp.com/predict/', {
                     method: 'POST',
                     body: formData
                 })
