@@ -36,5 +36,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Expose the port
 EXPOSE 8000
 
-# Run the API
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "$PORT"]
+# Command to run the app
+CMD ["python", "-m", "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -4,6 +4,8 @@ from torchvision import transforms
 from PIL import Image
 import torch
 import torch.nn as nn
+import os
+import uvicorn
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -63,3 +65,8 @@ async def predict(file: UploadFile = File(...)):
 
     except Exception as e:
         return {"error": str(e)}
+
+if __name__ == "__main__":
+    # Get the port from the environment variable or default to 8000
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run("app:app", host="0.0.0.0", port=port)
