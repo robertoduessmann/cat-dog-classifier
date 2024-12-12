@@ -20,18 +20,8 @@ COPY app.py ./
 COPY model ./model
 COPY static ./static
 COPY requirements.txt ./ 
-
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    python3-dev \
-    libjpeg-dev \
-    zlib1g-dev \
-    libfreetype6-dev \
-    build-essential \
-    libopenblas-dev
-
     
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Expose the port
 EXPOSE 8000
