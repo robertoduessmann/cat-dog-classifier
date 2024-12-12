@@ -1,5 +1,5 @@
-
 from fastapi import FastAPI, File, UploadFile
+from fastapi.staticfiles import StaticFiles
 from torchvision import transforms
 from PIL import Image
 import torch
@@ -7,6 +7,9 @@ import torch.nn as nn
 
 # Initialize FastAPI app
 app = FastAPI()
+
+# Mount the static directory
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Define the model (same architecture as before)
 class CNN(nn.Module):
@@ -42,17 +45,21 @@ transform = transforms.Compose([
 # API endpoint for predictions
 @app.post("/predict/")
 async def predict(file: UploadFile = File(...)):
-    # Load image
-    image = Image.open(file.file).convert('RGB')
-    
-    # Preprocess image
-    input_tensor = transform(image).unsqueeze(0).to(device)
+    try:
+        # Load image
+        image = Image.open(file.file).convert('RGB')
 
-    # Make prediction
-    with torch.no_grad():
-        output = model(input_tensor)
-        _, predicted = torch.max(output, 1)
-        class_names = ["cat", "dog"]
-        prediction = class_names[predicted.item()]
-    
-    return {"prediction": prediction}
+        # Preprocess image
+        input_tensor = transform(image).unsqueeze(0).to(device)
+
+        # Make prediction
+        with torch.no_grad():
+            output = model(input_tensor)
+            _, predicted = torch.max(output, 1)
+            class_names = ["cat", "dog"]
+            prediction = class_names[predicted.item()]
+
+        return {"prediction": prediction}
+
+    except Exception as e:
+        return {"error": str(e)}

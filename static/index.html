@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat and Dog Classifier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        #preview {
+            margin-top: 20px;
+            max-width: 300px;
+            max-height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cat and Dog Classifier</h1>
+    <p>Select an image of a cat or dog to classify:</p>
+
+    <!-- File input -->
+    <input type="file" id="fileInput" accept="image/*">
+
+    <!-- Image preview -->
+    <div>
+        <img id="preview" alt="Image preview will appear here">
+    </div>
+
+    <!-- Classification result -->
+    <div id="result" style="margin-top: 20px; font-weight: bold;"></div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const result = document.getElementById('result');
+
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+
+            if (file) {
+                // Show a preview of the image
+                const reader = new FileReader();
+                reader.onload = () => {
+                    preview.src = reader.result;
+                };
+                reader.readAsDataURL(file);
+
+                // Send the image to the API
+                const formData = new FormData();
+                formData.append('file', file);
+
+                fetch('http://localhost:8000/predict', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    result.textContent = `Prediction: ${data.prediction}`;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    result.textContent = 'Error occurred while processing the image.';
+                });
+            } else {
+                preview.src = '';
+                result.textContent = '';
+            }
+        });
+    </script>
+</body>
+</html>
